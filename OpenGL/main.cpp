@@ -56,8 +56,16 @@ static void error_callback(int error, const char* description)
 }
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS )
 		glfwSetWindowShouldClose(window, GL_TRUE);
+	if(key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		translate_value[0] = translate_value[0]+0.3f;
+	if(key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		translate_value[0] = translate_value[0]-0.3f;
+	if(key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		translate_value[2] = translate_value[2]+0.3f;
+	if(key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		translate_value[2] = translate_value[2]-0.3f;
 }
 
 
@@ -142,9 +150,9 @@ void light()
 
 
 
-void idle()
+void movement()
 {   
-	translate_value[0]  = translate_value[0] + 0.02f;
+	//translate_value[0]  = translate_value[0] + 0.02f;
 	//rotation_value = rotation_value+1.0f;
 	ModelView = OriginalModelView;
 	//ModelView = rotate(ModelView,rotation_value,vec3(0.0f,1.0f,0.0f));
@@ -224,7 +232,7 @@ int main(int argc,char *argv[])
 	{
 		display();
 		glfwPollEvents();
-		idle();
+		movement();
 	}
 	glfwTerminate();
 	return 0;

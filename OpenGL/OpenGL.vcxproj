@@ -137,6 +137,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Include/assimp/assimp.lib;Include/glew/glew32.lib;Include/GLFW/glfw3.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -153,6 +154,9 @@
   <ItemGroup>
     <None Include="fshader.glsl" />
     <None Include="vshader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="OpenGL_ICON.res" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

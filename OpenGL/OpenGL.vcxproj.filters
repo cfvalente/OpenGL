@@ -50,4 +50,9 @@
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="OpenGL_ICON.res">
+      <Filter>Resource Files</Filter>
+    </Resource>
+  </ItemGroup>
 </Project>
