@@ -10,6 +10,7 @@
 #include "file.h"
 #include "info.h"
 #include "loader.h"
+#include "movement.h"
 
 
 
@@ -38,13 +39,12 @@ vec4 *LightPosition;
 vec3 *Ld;
 
 mat4 ModelView;
-mat4 OriginalModelView;
 mat4 Projection;
 mat3 Normal;
 
-vec3 translate_value;
-vec3 scale_value;
-float rotation_value;
+vec3 position = vec3(0.0f,5.0f,40.0f);
+vec3 direction = vec3(0.0f,0.0f,-1.0f);
+vec3 up = vec3(0.0f,1.0f,0.0f);
 
 GLuint *elementBufferHandle;
 GLFWwindow* window;
@@ -56,18 +56,18 @@ static void error_callback(int error, const char* description)
 }
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS )
+	if (keyboard_movement(key, scancode, action, mods, position, direction) == CLOSE_WINDOW)
 		glfwSetWindowShouldClose(window, GL_TRUE);
-	if(key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT))
-		translate_value[0] = translate_value[0]+0.3f;
-	if(key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT))
-		translate_value[0] = translate_value[0]-0.3f;
-	if(key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT))
-		translate_value[2] = translate_value[2]+0.3f;
-	if(key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT))
-		translate_value[2] = translate_value[2]-0.3f;
 }
 
+void mouse_position_callback(GLFWwindow* window, double x, double y)
+{
+	int size_x,size_y;
+	glfwGetWindowSize(window,&size_x,&size_y);
+	glfwGetCursorPos(window,&x, &y);
+	glfwSetCursorPos(window,(size_x/2.0),(size_y/2.0));
+	mouse_movement(x,y,size_x,size_y,direction,up);
+}
 
 
 /* Inicializacao de variaveis e objetos */
@@ -87,17 +87,11 @@ void init(int argc, char *argv[])
 	glDepthFunc(GL_LEQUAL);
 	glClearColor ( 0.0f, 0.0f, 0.0f, 1.0f);
 
-	OriginalModelView = glm::mat4(1.0);
-	Projection = glm::mat4(1.0);
-	translate_value = vec3(0.0f,0.0f,-30.0f);
-	scale_value = vec3(1.0f,1.0f,1.0f);
-	rotation_value = 0.0f;
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 	Projection = glm::perspective(45.0f, 1280.0f / 1024.0f, 0.1f, 500.0f);
 
-	// Camera is at (4,3,3), in World Space, and looks at the origin, head is up (set to 0,-1,0 to look upside-down)
-	OriginalModelView = glm::lookAt(glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,0.0f,-1.0f), glm::vec3(0.0f,1.0f,0.0f));
-
+	// Camera is at (position), in World Space, and looks at the (direction), head is (up)
+	ModelView = glm::lookAt(position,position+direction,up);
 
 	model_data = load_model(MODEL);
 
@@ -152,12 +146,10 @@ void light()
 
 void movement()
 {   
-	//translate_value[0]  = translate_value[0] + 0.02f;
-	//rotation_value = rotation_value+1.0f;
-	ModelView = OriginalModelView;
+	ModelView = lookAt(position,position+direction,up);
 	//ModelView = rotate(ModelView,rotation_value,vec3(0.0f,1.0f,0.0f));
-	ModelView = translate(ModelView,translate_value);
-	ModelView =  rotate(ModelView,rotation_value,vec3(1.0f,0.0f,0.0f));
+	//ModelView = translate(ModelView,translate_value);
+	//ModelView =  rotate(ModelView,rotation_value,vec3(1.0f,0.0f,0.0f));
 	//ModelView = glm::scale(ModelView,scale);
 }
 
@@ -227,6 +219,8 @@ int main(int argc,char *argv[])
 	init(argc,argv);
 	glfwSetErrorCallback(error_callback);
 	glfwSetKeyCallback(window, key_callback);
+	glfwSetCursorPosCallback(window,mouse_position_callback);
+	glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_HIDDEN);
 	set_shader();
 	while(!glfwWindowShouldClose(window))
 	{

@@ -145,11 +145,13 @@
     <ClCompile Include="info.cpp" />
     <ClCompile Include="loader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="movement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="file.h" />
     <ClInclude Include="info.h" />
     <ClInclude Include="loader.h" />
+    <ClInclude Include="movement.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fshader.glsl" />
