@@ -56,7 +56,7 @@ static void error_callback(int error, const char* description)
 }
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (keyboard_movement(key, scancode, action, mods, position, direction) == CLOSE_WINDOW)
+	if (keyboard_movement(key, scancode, action, mods, position, direction, up) == CLOSE_WINDOW)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
