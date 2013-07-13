@@ -160,7 +160,7 @@ void display()
 
 	MVP = Projection * ModelView;
 	//ModelView = View*Model; /* Usar ModelView para calcular a normal ou apenas Model? --> Apenas Model, pois a luz nao esta no espaco da camera */
-	Normal = transpose(inverse(mat3(ModelView)));
+	Normal = mat3(1.0f);//transpose(inverse(mat3(ModelView)));
 
 	GLuint location = glGetUniformLocation(programHandle,"MVP");
 	glUniformMatrix4fv(location, 1, GL_FALSE, &MVP[0][0]);
