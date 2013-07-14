@@ -154,8 +154,8 @@
     <ClInclude Include="movement.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="fshader.glsl" />
-    <None Include="vshader.glsl" />
+    <None Include="fshader_gouraud.glsl" />
+    <None Include="vshader_gouraud.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="OpenGL_ICON.res" />

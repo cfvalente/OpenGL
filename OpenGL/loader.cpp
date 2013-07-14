@@ -45,6 +45,7 @@ struct model load_model(std::string pFile)
 	result.material_ka = new float*[result.num_meshes];
 	result.material_kd = new float*[result.num_meshes];
 	result.material_ks = new float*[result.num_meshes];
+	result.material_shininess = new float[result.num_meshes];
 	result.num_materials = scene->mNumMaterials;
 
 
@@ -79,7 +80,10 @@ struct model load_model(std::string pFile)
 		result.material_ks[i][1] = color.g;
 		result.material_ks[i][2] = color.b;
 
-		print("ks " << i << ": " << result.material_ks[i][0] << " " << result.material_ks[i][1] << " " << result.material_ks[i][2] << "\n");
+		print("ks " << i << ": " << result.material_ks[i][0] << " " << result.material_ks[i][1] << " " << result.material_ks[i][2] << "\n");\
+
+		scene->mMaterials[i]->Get(AI_MATKEY_SHININESS,result.material_shininess[i]);;
+
 	}
 
 	/* Carrega o modelo */

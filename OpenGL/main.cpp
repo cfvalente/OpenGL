@@ -35,8 +35,10 @@ GLuint programHandle;
 GLuint *vaoHandle;
 model model_data;
 
-vec4 *LightPosition;
-vec3 *Ld;
+vec4 LightPosition;
+vec3 La;
+vec3 Ld;
+vec3 Ls;
 
 mat4 ModelView;
 mat4 Projection;
@@ -136,10 +138,10 @@ void init(int argc, char *argv[])
 /* Cuida da inicializacao da luz */
 void light()
 {
-	LightPosition = new glm::vec4[1];
-	Ld = new glm::vec3[1];
-	LightPosition[0] = glm::vec4(0.0f,0.0f,20.0f,1.0f);
-	Ld[0] = glm::vec3(1.0f,1.0f,1.0f);
+	LightPosition = glm::vec4(0.0f,0.0f,20.0f,1.0f);
+	La = glm::vec3(0.1f,0.1f,0.1f);
+	Ld = glm::vec3(0.8f,0.8f,0.8f);
+	Ls = glm::vec3(0.3f,0.3f,0.3f);
 }
 
 
@@ -170,14 +172,39 @@ void display()
 	glUniformMatrix3fv(location, 1, GL_FALSE, &Normal[0][0]);
 	location = glGetUniformLocation(programHandle,"LightPosition");
 	glUniform4f(location,0.0f,0.0f,40.0f,1.0f);
+	location = glGetUniformLocation(programHandle,"La");
+	glUniform3f(location,La[0],La[1],La[2]);
 	location = glGetUniformLocation(programHandle,"Ld");
-	glUniform3f(location,1.0f,1.0f,1.0f);
+	glUniform3f(location,Ld[0],Ld[1],Ld[2]);
+	location = glGetUniformLocation(programHandle,"Ls");
+	glUniform3f(location,Ls[0],Ls[1],Ls[2]);
+
+	/*
+	GLuint blockIndex = glGetUniformBlockIndex(programHandle,"Light");
+	GLint blockSize;
+	glGetActiveUniformBlockiv(programHandle,blockIndex,GL_UNIFORM_BLOCK_DATA_SIZE,&blockSize);
+	GLubyte *blockBuffer = (GLubyte *) malloc(blockSize);
+	const GLchar *names[] = { "Position", "La", "Ld", "Ls" };
+	GLuint indices[4];
+	glGetUniformIndices(programHandle,4,names,indices);
+	GLint offset[4];
+	glGetActiveUniformsiv(programHandle,4,indices,GL_UNIFORM_OFFSET,offset);
+
+	*/
+
+
 	for(unsigned int m = 0; m < model_data.num_meshes; m++)
 	{
 		glBindVertexArray(vaoHandle[m]);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,elementBufferHandle[m]);
+		location = glGetUniformLocation(programHandle,"Ka");
+		glUniform3f(location,model_data.material_ka[model_data.mesh_material[m]][0],model_data.material_ka[model_data.mesh_material[m]][1],model_data.material_ka[model_data.mesh_material[m]][2]);
 		location = glGetUniformLocation(programHandle,"Kd");
 		glUniform3f(location,model_data.material_kd[model_data.mesh_material[m]][0],model_data.material_kd[model_data.mesh_material[m]][1],model_data.material_kd[model_data.mesh_material[m]][2]);
+		location = glGetUniformLocation(programHandle,"Ks");
+		glUniform3f(location,model_data.material_ks[model_data.mesh_material[m]][0],model_data.material_ks[model_data.mesh_material[m]][1],model_data.material_ks[model_data.mesh_material[m]][2]);
+		location = glGetUniformLocation(programHandle,"Shineness");
+		glUniform1f(location,model_data.material_shininess[model_data.mesh_material[m]]);
 
 		glDrawElements(GL_TRIANGLES, 3 * model_data.num_faces[m] * sizeof(GL_UNSIGNED_INT), GL_UNSIGNED_INT, (void*)0);
 	}
@@ -192,8 +219,8 @@ void set_shader()
 	programHandle = glCreateProgram();
 	if(vshader == 0) cout << "Error: Vertex Shader\n";
 	if(fshader == 0) cout << "Error: Fragment Shader\n";
-	const GLchar *vshadercode = read_file("vshader.glsl");
-	const GLchar *fshadercode = read_file("fshader.glsl");
+	const GLchar *vshadercode = read_file("vshader_gouraud.glsl");
+	const GLchar *fshadercode = read_file("fshader_gouraud.glsl");
 	const GLchar *vcodeArray[] = {vshadercode};
 	const GLchar *fcodeArray[] = {fshadercode};
 	size[0] = strlen(vshadercode);
@@ -222,6 +249,7 @@ int main(int argc,char *argv[])
 	glfwSetCursorPosCallback(window,mouse_position_callback);
 	glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_HIDDEN);
 	set_shader();
+	light();
 	while(!glfwWindowShouldClose(window))
 	{
 		display();

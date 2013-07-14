@@ -8,6 +8,7 @@ struct model
 	float **material_ks;
 	float **material_ka;
 	float **material_kd;
+	float *material_shininess;
 	unsigned int *mesh_material;
 	unsigned int **face_data;
 	unsigned int *num_vertices;

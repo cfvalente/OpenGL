@@ -49,10 +49,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="vshader.glsl">
+    <None Include="vshader_gouraud.glsl">
       <Filter>Shader</Filter>
     </None>
-    <None Include="fshader.glsl">
+    <None Include="fshader_gouraud.glsl">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>
