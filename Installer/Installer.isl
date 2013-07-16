@@ -1890,7 +1890,8 @@
 		<row><td>cubo.obj</td><td>ISX_DEFAULTCOMPONENT1</td><td>cubo.obj</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Caio\Documents\Visual Studio 2012\Projects\OpenGL\OpenGL\SimpleModel\cubo.obj</td><td>1</td><td/></row>
 		<row><td>cubo_1cor.mtl</td><td>ISX_DEFAULTCOMPONENT1</td><td>CUBO_1~1.MTL|cubo_1cor.mtl</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Caio\Documents\Visual Studio 2012\Projects\OpenGL\OpenGL\SimpleModel\cubo_1cor.mtl</td><td>1</td><td/></row>
 		<row><td>cubo_colorido.mtl</td><td>ISX_DEFAULTCOMPONENT1</td><td>CUBO_C~1.MTL|cubo_colorido.mtl</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Caio\Documents\Visual Studio 2012\Projects\OpenGL\OpenGL\SimpleModel\cubo_colorido.mtl</td><td>1</td><td/></row>
-		<row><td>fshader.glsl</td><td>ISX_DEFAULTCOMPONENT</td><td>FSHADE~1.GLS|fshader.glsl</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Caio\Documents\Visual Studio 2012\Projects\OpenGL\OpenGL\fshader.glsl</td><td>1</td><td/></row>
+		<row><td>fshader_gouraud.glsl</td><td>ISX_DEFAULTCOMPONENT</td><td>FSHADE~1.GLS|fshader_gouraud.glsl</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Caio\Documents\Visual Studio 2012\Projects\OpenGL\OpenGL\fshader_gouraud.glsl</td><td>1</td><td/></row>
+		<row><td>fshader_phong.glsl</td><td>ISX_DEFAULTCOMPONENT</td><td>FSHADE~1.GLS|fshader_phong.glsl</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Caio\Documents\Visual Studio 2012\Projects\OpenGL\OpenGL\fshader_phong.glsl</td><td>1</td><td/></row>
 		<row><td>glew32.dll</td><td>glew32.dll</td><td>glew32.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Caio\Documents\Visual Studio 2012\Projects\OpenGL\OpenGL\glew32.dll</td><td>1</td><td/></row>
 		<row><td>glew32mx.dll</td><td>glew32mx.dll</td><td>glew32mx.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Caio\Documents\Visual Studio 2012\Projects\OpenGL\OpenGL\glew32mx.dll</td><td>1</td><td/></row>
 		<row><td>glfw3.dll</td><td>glfw3.dll</td><td>glfw3.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Caio\Documents\Visual Studio 2012\Projects\OpenGL\OpenGL\glfw3.dll</td><td>1</td><td/></row>
@@ -1900,7 +1901,8 @@
 		<row><td>simples.obj</td><td>ISX_DEFAULTCOMPONENT1</td><td>simples.obj</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Caio\Documents\Visual Studio 2012\Projects\OpenGL\OpenGL\SimpleModel\simples.obj</td><td>1</td><td/></row>
 		<row><td>teapot.mtl</td><td>ISX_DEFAULTCOMPONENT1</td><td>teapot.mtl</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Caio\Documents\Visual Studio 2012\Projects\OpenGL\OpenGL\SimpleModel\teapot.mtl</td><td>1</td><td/></row>
 		<row><td>teapot.obj</td><td>ISX_DEFAULTCOMPONENT1</td><td>teapot.obj</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Caio\Documents\Visual Studio 2012\Projects\OpenGL\OpenGL\SimpleModel\teapot.obj</td><td>1</td><td/></row>
-		<row><td>vshader.glsl</td><td>ISX_DEFAULTCOMPONENT</td><td>VSHADE~1.GLS|vshader.glsl</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Caio\Documents\Visual Studio 2012\Projects\OpenGL\OpenGL\vshader.glsl</td><td>1</td><td/></row>
+		<row><td>vshader_gouraud.glsl</td><td>ISX_DEFAULTCOMPONENT</td><td>VSHADE~1.GLS|vshader_gouraud.glsl</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Caio\Documents\Visual Studio 2012\Projects\OpenGL\OpenGL\vshader_gouraud.glsl</td><td>1</td><td/></row>
+		<row><td>vshader_phong.glsl</td><td>ISX_DEFAULTCOMPONENT</td><td>VSHADE~1.GLS|vshader_phong.glsl</td><td>0</td><td/><td/><td/><td>1</td><td>C:\Users\Caio\Documents\Visual Studio 2012\Projects\OpenGL\OpenGL\vshader_phong.glsl</td><td>1</td><td/></row>
 	</table>
 
 	<table name="FileSFPCatalog">

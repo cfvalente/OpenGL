@@ -5,7 +5,6 @@ layout (location = 1) in vec3 VertexNormal;
 
 uniform mat4 MVP;
 uniform mat4 ModelView;
-uniform mat3 Normal;
 
 
 uniform vec4 LightPosition;
@@ -17,6 +16,8 @@ uniform vec3 Ka;
 uniform vec3 Kd;
 uniform vec3 Ks;
 uniform float Shininess;
+
+uniform float renderingMode;
 
 /*struct LightInfo {
 	vec4 Position;
@@ -44,24 +45,29 @@ void main()
 	vec3 diffuse;
 	vec3 specular;
 
-	vec3 tnorm = normalize(Normal*VertexNormal);
-	vec4 eyeCoords = ModelView*vec4(VertexPosition,1.0f);
-	vec3 s = normalize(vec3(LightPosition-eyeCoords));
-	vec3 v = normalize(-eyeCoords.xyz);
-	vec3 r = reflect(-s,tnorm);
-	float sDotN = max(dot(s,tnorm),0.0);
+	vec3 tnorm = vec3(ModelView*vec4(VertexNormal,0.0));  /* Como não estou fazendo operacoes com escala/cisalhamento não é necessario usar a matriz de transformacoes normais */
+	vec4 model = ModelView*vec4(VertexPosition,1.0f); /* Com isso a cena não é influenciada pela movimentação da camera, mas caso haja movimento dos proprios objetos, isso não será considerado */
+	vec3 direction = normalize(vec3(ModelView*LightPosition-model));
+	vec3 camera = normalize(-model.xyz);
+	vec3 reflected = reflect(-direction,tnorm);
+	float light_object_ang = max(dot(direction,tnorm),0.0);
+	float camera_reflected_ang = max(dot(reflected,camera), 0.0);
 
 	/* Luz difusa */
-	diffuse = Ld * Kd * sDotN;
+	diffuse = Ld * Kd * light_object_ang;
 
 	/* Luz ambiente */
 	ambient = La*Ka;
 
 	/* Luz especular */
 	specular = vec3(0.0, 0.0, 0.0);
-	if(sDotN > 0.0)
-		specular = Ls * Ks * pow(max(dot(r,v), 0.0), Shininess);
+	if(light_object_ang > 0.0)
+		specular = clamp(Ls * Ks * pow(camera_reflected_ang, Shininess),0,1);
 
-	Color = min(diffuse + ambient + specular,1.0);
+	
+	if(renderingMode == 1) Color = diffuse;
+	else if(renderingMode == 2) Color = ambient;
+	else if(renderingMode == 3) Color = specular;
+	else Color = diffuse + ambient + specular;
 	gl_Position = MVP*vec4(VertexPosition[0],VertexPosition[1],VertexPosition[2],1.0);
 }

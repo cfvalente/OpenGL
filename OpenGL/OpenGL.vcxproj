@@ -145,20 +145,36 @@
     <ClCompile Include="info.cpp" />
     <ClCompile Include="loader.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="movement.cpp" />
+    <ClCompile Include="controls.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="file.h" />
     <ClInclude Include="info.h" />
     <ClInclude Include="loader.h" />
-    <ClInclude Include="movement.h" />
+    <ClInclude Include="controls.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fshader_gouraud.glsl" />
+    <None Include="fshader_phong.glsl" />
     <None Include="vshader_gouraud.glsl" />
+    <None Include="vshader_phong.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="OpenGL_ICON.res" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="SimpleModel\cubo.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="SimpleModel\simples.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="SimpleModel\teapot.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Object>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

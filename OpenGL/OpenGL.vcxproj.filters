@@ -30,7 +30,7 @@
     <ClCompile Include="file.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="movement.cpp">
+    <ClCompile Include="controls.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,7 +44,7 @@
     <ClInclude Include="file.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="movement.h">
+    <ClInclude Include="controls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -55,10 +55,27 @@
     <None Include="fshader_gouraud.glsl">
       <Filter>Shader</Filter>
     </None>
+    <None Include="vshader_phong.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="fshader_phong.glsl">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="OpenGL_ICON.res">
       <Filter>Resource Files</Filter>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="SimpleModel\simples.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
+    <Object Include="SimpleModel\cubo.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
+    <Object Include="SimpleModel\teapot.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
   </ItemGroup>
 </Project>

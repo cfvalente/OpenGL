@@ -1,4 +1,4 @@
-#include "movement.h"
+#include "controls.h"
 
 static float vertical_angle = 0.0f;
 static float horizontal_angle = 3.14f;
@@ -15,7 +15,7 @@ void mouse_movement(double x,double y,double size_x,double size_y,glm::vec3 &dir
 	up = glm::cross( right, direction );
 }
 
-int keyboard_movement(int key, int scancode, int action, int mods,glm::vec3 &position, glm::vec3 direction, glm::vec3 up)
+int keyboard_movement(int key, int scancode, int action, int mods, int &renderingMode, glm::vec3 &position, glm::vec3 direction, glm::vec3 up)
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS )
 		return CLOSE_WINDOW;
@@ -31,5 +31,13 @@ int keyboard_movement(int key, int scancode, int action, int mods,glm::vec3 &pos
 		position += up * glm::vec3(keyboard_movement_speed);
 	if(key == GLFW_KEY_LEFT_CONTROL && (action == GLFW_PRESS || action == GLFW_REPEAT))
 		position -= up * glm::vec3(keyboard_movement_speed);
+	if(key == GLFW_KEY_1 && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		renderingMode = rendering::diffuse;
+	if(key == GLFW_KEY_2 && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		renderingMode = rendering::ambient;
+	if(key == GLFW_KEY_3 && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		renderingMode = rendering::specular;
+	if(key == GLFW_KEY_0 && (action == GLFW_PRESS || action == GLFW_REPEAT))
+		renderingMode = rendering::all;
 	return !CLOSE_WINDOW;
 }

@@ -10,9 +10,10 @@
 #include "file.h"
 #include "info.h"
 #include "loader.h"
-#include "movement.h"
+#include "controls.h"
 
 
+#define CHAO
 
 #ifdef SPONZA
 #define MODEL "Model/sponza.obj"
@@ -20,9 +21,14 @@
 #ifdef TEAPOT
 #define MODEL "SimpleModel/teapot.obj"
 #else
+#ifdef CHAO
+#define MODEL "SimpleModel/simples_com_chao.obj"
+#else
 #define MODEL "SimpleModel/simples.obj"
 #endif
 #endif
+#endif
+
 //#define MODEL "SimpleModel/simples.obj"
 // "SimpleModel/teapot.obj"
 // "Model/sponza.obj"
@@ -48,8 +54,13 @@ vec3 position = vec3(0.0f,5.0f,40.0f);
 vec3 direction = vec3(0.0f,0.0f,-1.0f);
 vec3 up = vec3(0.0f,1.0f,0.0f);
 
+int renderingMode;
+
 GLuint *elementBufferHandle;
 GLFWwindow* window;
+
+char *vshader_name = "vshader_phong.glsl";
+char *fshader_name = "fshader_phong.glsl";
 
 
 static void error_callback(int error, const char* description)
@@ -58,7 +69,7 @@ static void error_callback(int error, const char* description)
 }
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (keyboard_movement(key, scancode, action, mods, position, direction, up) == CLOSE_WINDOW)
+	if (keyboard_movement(key, scancode, action, mods, renderingMode, position, direction, up) == CLOSE_WINDOW)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
@@ -88,6 +99,8 @@ void init(int argc, char *argv[])
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glClearColor ( 0.0f, 0.0f, 0.0f, 1.0f);
+
+	renderingMode = rendering::all;
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 	Projection = glm::perspective(45.0f, 1280.0f / 1024.0f, 0.1f, 500.0f);
@@ -140,6 +153,7 @@ void light()
 {
 	LightPosition = glm::vec4(0.0f,0.0f,20.0f,1.0f);
 	La = glm::vec3(0.1f,0.1f,0.1f);
+	//La = glm::vec3(1.0f,1.0f,1.0f);
 	Ld = glm::vec3(0.8f,0.8f,0.8f);
 	Ls = glm::vec3(0.3f,0.3f,0.3f);
 }
@@ -168,8 +182,6 @@ void display()
 	glUniformMatrix4fv(location, 1, GL_FALSE, &MVP[0][0]);
 	location = glGetUniformLocation(programHandle,"ModelView");
 	glUniformMatrix4fv(location, 1, GL_FALSE, &ModelView[0][0]);
-	location = glGetUniformLocation(programHandle,"Normal");
-	glUniformMatrix3fv(location, 1, GL_FALSE, &Normal[0][0]);
 	location = glGetUniformLocation(programHandle,"LightPosition");
 	glUniform4f(location,0.0f,0.0f,40.0f,1.0f);
 	location = glGetUniformLocation(programHandle,"La");
@@ -178,6 +190,8 @@ void display()
 	glUniform3f(location,Ld[0],Ld[1],Ld[2]);
 	location = glGetUniformLocation(programHandle,"Ls");
 	glUniform3f(location,Ls[0],Ls[1],Ls[2]);
+	location = glGetUniformLocation(programHandle,"renderingMode");
+	glUniform1f(location,(int)renderingMode);
 
 	/*
 	GLuint blockIndex = glGetUniformBlockIndex(programHandle,"Light");
@@ -219,8 +233,8 @@ void set_shader()
 	programHandle = glCreateProgram();
 	if(vshader == 0) cout << "Error: Vertex Shader\n";
 	if(fshader == 0) cout << "Error: Fragment Shader\n";
-	const GLchar *vshadercode = read_file("vshader_gouraud.glsl");
-	const GLchar *fshadercode = read_file("fshader_gouraud.glsl");
+	const GLchar *vshadercode = read_file(vshader_name);
+	const GLchar *fshadercode = read_file(fshader_name);
 	const GLchar *vcodeArray[] = {vshadercode};
 	const GLchar *fcodeArray[] = {fshadercode};
 	size[0] = strlen(vshadercode);
