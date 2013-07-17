@@ -1,8 +1,6 @@
 #ifndef CONTROLS
 #define CONTROLS
 
-
-#include <iostream>
 #include "Include/glm/glm.hpp"
 #include "Include/GLFW/glfw3.h"
 

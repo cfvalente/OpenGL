@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "controls.h"
 
 static float vertical_angle = 0.0f;

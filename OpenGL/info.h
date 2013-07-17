@@ -1,11 +1,7 @@
 #ifndef INFO
 #define INFO
 
-
-#include <iostream>
-
 #include "Include/glew/glew.h"
-#include "Include/GLFW/glfw3.h"
 #include "Include/glm/glm.hpp"
 
 void print_data();

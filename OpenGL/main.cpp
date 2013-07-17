@@ -7,13 +7,12 @@
 #include "Include/glm/glm.hpp"
 #include "Include/glm/gtc/matrix_transform.hpp"
 
-#include "file.h"
 #include "info.h"
 #include "loader.h"
 #include "controls.h"
+#include "shader.h"
 
 
-#define CHAO
 
 #ifdef SPONZA
 #define MODEL "Model/sponza.obj"
@@ -47,6 +46,8 @@ vec3 Ld;
 vec3 Ls;
 
 mat4 ModelView;
+mat4 Model;
+mat4 View;
 mat4 Projection;
 mat3 Normal;
 
@@ -69,8 +70,14 @@ static void error_callback(int error, const char* description)
 }
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+	static bool a = 0;
 	if (keyboard_movement(key, scancode, action, mods, renderingMode, position, direction, up) == CLOSE_WINDOW)
 		glfwSetWindowShouldClose(window, GL_TRUE);
+	if(key == GLFW_KEY_P && action == GLFW_PRESS)
+	{
+		if(a) { cout << "A"; a = !a; }
+		else { cout << "B"; a = !a; }
+	}
 }
 
 void mouse_position_callback(GLFWwindow* window, double x, double y)
@@ -225,36 +232,6 @@ void display()
 	glfwSwapBuffers(window);
 }
 
-void set_shader()
-{
-	GLint size[2];
-	GLuint vshader = glCreateShader(GL_VERTEX_SHADER);
-	GLuint fshader = glCreateShader(GL_FRAGMENT_SHADER);
-	programHandle = glCreateProgram();
-	if(vshader == 0) cout << "Error: Vertex Shader\n";
-	if(fshader == 0) cout << "Error: Fragment Shader\n";
-	const GLchar *vshadercode = read_file(vshader_name);
-	const GLchar *fshadercode = read_file(fshader_name);
-	const GLchar *vcodeArray[] = {vshadercode};
-	const GLchar *fcodeArray[] = {fshadercode};
-	size[0] = strlen(vshadercode);
-	size[1] = strlen(fshadercode);
-	glShaderSource(vshader,1,vcodeArray,NULL);
-	glShaderSource(fshader,1,fcodeArray,NULL);
-	glCompileShader(vshader);
-	glCompileShader(fshader);
-	print_compilation(vshader);
-	print_compilation(fshader);
-	glAttachShader(programHandle,vshader);
-	glAttachShader(programHandle,fshader);
-
-	glLinkProgram(programHandle);
-	if(!print_link(programHandle))
-	{
-		glUseProgram(programHandle);
-	}
-}
-
 int main(int argc,char *argv[])
 {
 	init(argc,argv);
@@ -262,7 +239,10 @@ int main(int argc,char *argv[])
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetCursorPosCallback(window,mouse_position_callback);
 	glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_HIDDEN);
-	set_shader();
+
+	useShader(programHandle,compileShader(programHandle,vshader_name,fshader_name));
+
+
 	light();
 	while(!glfwWindowShouldClose(window))
 	{
