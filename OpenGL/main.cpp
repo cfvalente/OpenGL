@@ -11,6 +11,7 @@
 #include "loader.h"
 #include "controls.h"
 #include "shader.h"
+#include "renderer.h"
 
 
 
@@ -40,10 +41,6 @@ GLuint programHandle;
 GLuint *vaoHandle;
 model model_data;
 
-vec4 LightPosition;
-vec3 La;
-vec3 Ld;
-vec3 Ls;
 
 mat4 ModelView;
 mat4 Model;
@@ -112,8 +109,10 @@ void init(int argc, char *argv[])
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 	Projection = glm::perspective(45.0f, 1280.0f / 1024.0f, 0.1f, 500.0f);
 
+	Model = mat4(1.0);
+
 	// Camera is at (position), in World Space, and looks at the (direction), head is (up)
-	ModelView = glm::lookAt(position,position+direction,up);
+	View = glm::lookAt(position,position+direction,up);
 
 	model_data = load_model(MODEL);
 
@@ -155,82 +154,16 @@ void init(int argc, char *argv[])
 }
 
 
-/* Cuida da inicializacao da luz */
-void light()
-{
-	LightPosition = glm::vec4(0.0f,0.0f,20.0f,1.0f);
-	La = glm::vec3(0.1f,0.1f,0.1f);
-	//La = glm::vec3(1.0f,1.0f,1.0f);
-	Ld = glm::vec3(0.8f,0.8f,0.8f);
-	Ls = glm::vec3(0.3f,0.3f,0.3f);
-}
-
-
 
 void movement()
 {   
-	ModelView = lookAt(position,position+direction,up);
+	View = lookAt(position,position+direction,up);
 	//ModelView = rotate(ModelView,rotation_value,vec3(0.0f,1.0f,0.0f));
 	//ModelView = translate(ModelView,translate_value);
 	//ModelView =  rotate(ModelView,rotation_value,vec3(1.0f,0.0f,0.0f));
 	//ModelView = glm::scale(ModelView,scale);
 }
 
-void display()
-{
-	mat4 MVP;
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	MVP = Projection * ModelView;
-	//ModelView = View*Model; /* Usar ModelView para calcular a normal ou apenas Model? --> Apenas Model, pois a luz nao esta no espaco da camera */
-	Normal = mat3(1.0f);//transpose(inverse(mat3(ModelView)));
-
-	GLuint location = glGetUniformLocation(programHandle,"MVP");
-	glUniformMatrix4fv(location, 1, GL_FALSE, &MVP[0][0]);
-	location = glGetUniformLocation(programHandle,"ModelView");
-	glUniformMatrix4fv(location, 1, GL_FALSE, &ModelView[0][0]);
-	location = glGetUniformLocation(programHandle,"LightPosition");
-	glUniform4f(location,0.0f,0.0f,40.0f,1.0f);
-	location = glGetUniformLocation(programHandle,"La");
-	glUniform3f(location,La[0],La[1],La[2]);
-	location = glGetUniformLocation(programHandle,"Ld");
-	glUniform3f(location,Ld[0],Ld[1],Ld[2]);
-	location = glGetUniformLocation(programHandle,"Ls");
-	glUniform3f(location,Ls[0],Ls[1],Ls[2]);
-	location = glGetUniformLocation(programHandle,"renderingMode");
-	glUniform1f(location,(int)renderingMode);
-
-	/*
-	GLuint blockIndex = glGetUniformBlockIndex(programHandle,"Light");
-	GLint blockSize;
-	glGetActiveUniformBlockiv(programHandle,blockIndex,GL_UNIFORM_BLOCK_DATA_SIZE,&blockSize);
-	GLubyte *blockBuffer = (GLubyte *) malloc(blockSize);
-	const GLchar *names[] = { "Position", "La", "Ld", "Ls" };
-	GLuint indices[4];
-	glGetUniformIndices(programHandle,4,names,indices);
-	GLint offset[4];
-	glGetActiveUniformsiv(programHandle,4,indices,GL_UNIFORM_OFFSET,offset);
-
-	*/
-
-
-	for(unsigned int m = 0; m < model_data.num_meshes; m++)
-	{
-		glBindVertexArray(vaoHandle[m]);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,elementBufferHandle[m]);
-		location = glGetUniformLocation(programHandle,"Ka");
-		glUniform3f(location,model_data.material_ka[model_data.mesh_material[m]][0],model_data.material_ka[model_data.mesh_material[m]][1],model_data.material_ka[model_data.mesh_material[m]][2]);
-		location = glGetUniformLocation(programHandle,"Kd");
-		glUniform3f(location,model_data.material_kd[model_data.mesh_material[m]][0],model_data.material_kd[model_data.mesh_material[m]][1],model_data.material_kd[model_data.mesh_material[m]][2]);
-		location = glGetUniformLocation(programHandle,"Ks");
-		glUniform3f(location,model_data.material_ks[model_data.mesh_material[m]][0],model_data.material_ks[model_data.mesh_material[m]][1],model_data.material_ks[model_data.mesh_material[m]][2]);
-		location = glGetUniformLocation(programHandle,"Shineness");
-		glUniform1f(location,model_data.material_shininess[model_data.mesh_material[m]]);
-
-		glDrawElements(GL_TRIANGLES, 3 * model_data.num_faces[m] * sizeof(GL_UNSIGNED_INT), GL_UNSIGNED_INT, (void*)0);
-	}
-	glfwSwapBuffers(window);
-}
 
 int main(int argc,char *argv[])
 {
@@ -242,11 +175,11 @@ int main(int argc,char *argv[])
 
 	useShader(programHandle,compileShader(programHandle,vshader_name,fshader_name));
 
-
 	light();
+	Model = glm::mat4(1.0);
 	while(!glfwWindowShouldClose(window))
 	{
-		display();
+		renderer(programHandle, Model, View, Projection, mat3(View*Model), renderingMode, model_data, vaoHandle, elementBufferHandle, window);
 		glfwPollEvents();
 		movement();
 	}

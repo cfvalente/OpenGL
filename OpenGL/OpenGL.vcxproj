@@ -148,6 +148,7 @@
     <ClCompile Include="loader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="controls.cpp" />
+    <ClCompile Include="renderer.cpp" />
     <ClCompile Include="shader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +156,7 @@
     <ClInclude Include="info.h" />
     <ClInclude Include="loader.h" />
     <ClInclude Include="controls.h" />
+    <ClInclude Include="renderer.h" />
     <ClInclude Include="shader.h" />
   </ItemGroup>
   <ItemGroup>

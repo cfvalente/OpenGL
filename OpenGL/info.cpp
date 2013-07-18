@@ -4,7 +4,7 @@
 
 
 
-void print_data()
+void printData()
 {
 	const GLubyte *renderer = glGetString(GL_RENDERER);
 	const GLubyte *vendor = glGetString(GL_VENDOR);
@@ -21,7 +21,7 @@ void print_data()
 }
 
 
-void print_compilation(GLuint shader)
+bool compilationStatus(GLuint shader)
 {
 	GLint res,loglen;
 	glGetShaderiv(shader,GL_COMPILE_STATUS,&res);
@@ -37,12 +37,14 @@ void print_compilation(GLuint shader)
 				printf("Shader log:\n%s\n",log);
 				free(log);
 			}
+			return false;
 
 	}
+	return true;
 }
 
 
-int print_link(GLuint programHandle)
+bool linkStatus(GLuint programHandle)
 {
 	GLint status,loglen;
 	glGetProgramiv(programHandle,GL_LINK_STATUS,&status);
@@ -57,14 +59,14 @@ int print_link(GLuint programHandle)
 			glGetProgramInfoLog(programHandle,loglen,&written,log);
 			printf("Program Log:\n%s\n",log);
 			free(log);
-			return 1;
+			return false;
 		}
 	}
-	return 0;
+	return true;
 }
 
 
-void print_matrix(glm::mat4 M)
+void printMatrix(glm::mat4 M)
 {
 	for(int i = 0;i < 4; i++)
 	{

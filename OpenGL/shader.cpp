@@ -44,7 +44,7 @@ void useShader(GLuint &programHandle, int shaderIndex)
 	glAttachShader(programHandle,shaders[shaderIndex].fshader);
 
 	glLinkProgram(programHandle);
-	if(!print_link(programHandle))
+	if(linkStatus(programHandle))
 	{
 		glUseProgram(programHandle);
 	}
@@ -68,14 +68,16 @@ int compileShader(GLuint &programHandle, char *vshader_name, char *fshader_name)
 	glShaderSource(fshader,1,fcodeArray,NULL);
 	glCompileShader(vshader);
 	glCompileShader(fshader);
-	print_compilation(vshader);
-	print_compilation(fshader);
 
-	shader res;
-	res.fshader = fshader;
-	res.vshader = vshader;
-	res.fshader_name = fshader_name;
-	res.vshader_name = vshader_name;
-	shaders.push_back(res);
-	return shaders.size()-1;
+	if(compilationStatus(vshader) != false && compilationStatus(fshader) != false)
+	{
+		shader res;
+		res.fshader = fshader;
+		res.vshader = vshader;
+		res.fshader_name = fshader_name;
+		res.vshader_name = vshader_name;
+		shaders.push_back(res);
+		return shaders.size()-1;
+	}
+	return -1;
 }
