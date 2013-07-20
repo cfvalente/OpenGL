@@ -141,5 +141,40 @@ struct model load_model(std::string pFile)
 			}
 		}
 	}
+
+	result.vaoHandle = new GLuint[result.num_meshes];
+	result.elementBufferHandle = new GLuint[result.num_meshes];
+	for(unsigned int m = 0; m<result.num_meshes; m++)
+	{
+		GLuint vboHandles[2];
+		glGenBuffers(1,&vboHandles[0]);
+		GLuint positionBufferHandle = vboHandles[0];
+		glGenBuffers(1,&vboHandles[1]);
+		GLuint normalBufferHandle = vboHandles[1];
+
+		glGenBuffers(1, &result.elementBufferHandle[m]);
+
+		glBindBuffer(GL_ARRAY_BUFFER,positionBufferHandle);
+		glBufferData(GL_ARRAY_BUFFER,3*result.num_vertices[m]*sizeof(float),result.position_data[m],GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER,normalBufferHandle);
+		glBufferData(GL_ARRAY_BUFFER,3*result.num_vertices[m]*sizeof(float),result.normal_data[m],GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, result.elementBufferHandle[m]);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * result.num_faces[m] * sizeof(GL_UNSIGNED_INT), result.face_data[m], GL_STATIC_DRAW);
+
+		glGenVertexArrays(1,&result.vaoHandle[m]);
+		glBindVertexArray(result.vaoHandle[m]);
+
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+
+		glBindBuffer(GL_ARRAY_BUFFER,positionBufferHandle);
+		glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(GLubyte *)NULL);
+
+		glBindBuffer(GL_ARRAY_BUFFER,normalBufferHandle);
+		glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,0,(GLubyte *)NULL);
+
+	}
 	return result;
 }

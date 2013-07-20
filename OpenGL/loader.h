@@ -1,8 +1,12 @@
 #ifndef LOADER
 #define LOADER
 
+#include "Include/glew/glew.h"
+
 struct model
 {
+	GLuint *vaoHandle;
+	GLuint *elementBufferHandle;
 	float **position_data;
 	float **normal_data;
 	float **material_ks;

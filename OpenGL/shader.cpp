@@ -62,8 +62,8 @@ int compileShader(GLuint &programHandle, char *vshader_name, char *fshader_name)
 	const GLchar *fshadercode = read_file(fshader_name);
 	const GLchar *vcodeArray[] = {vshadercode};
 	const GLchar *fcodeArray[] = {fshadercode};
-	size[0] = strlen(vshadercode);
-	size[1] = strlen(fshadercode);
+	size[0] = (int) strlen(vshadercode);
+	size[1] = (int) strlen(fshadercode);
 	glShaderSource(vshader,1,vcodeArray,NULL);
 	glShaderSource(fshader,1,fcodeArray,NULL);
 	glCompileShader(vshader);
@@ -77,7 +77,7 @@ int compileShader(GLuint &programHandle, char *vshader_name, char *fshader_name)
 		res.fshader_name = fshader_name;
 		res.vshader_name = vshader_name;
 		shaders.push_back(res);
-		return shaders.size()-1;
+		return (int) shaders.size()-1;
 	}
 	return -1;
 }
